@@ -18,6 +18,9 @@ var Section = require('./components/section');
 /* require constant file */
 var Constant = require('./constants/light-constant');
 
+var interval;
+var status = true;
+
 var app = React.createClass({
 
   /*
@@ -42,8 +45,6 @@ var app = React.createClass({
     Action.init();
   },
   componentDidMount: function() {
-    // 每五秒有新的數字存進資料庫
-    // this.setTemp();
 
   },
   render: function() {
@@ -112,7 +113,13 @@ var app = React.createClass({
    */
   onLightStateChange: function(event, data) {
     this.setState({ devices: data });
-    Action.setLightInterval(this.state.devices);
+    clearInterval(interval);
+
+    interval = setInterval(function(){
+      Action.toggleLightState('light_c', status);
+      status = !status;
+      console.log(status);
+    }, 1000);
   },
 });
 
